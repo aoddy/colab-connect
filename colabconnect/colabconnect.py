@@ -12,8 +12,8 @@ message = """
 """.strip()
 
 
-def start_tunnel() -> None:
-    command = "./code tunnel --accept-server-license-terms --random-name"
+def start_tunnel(tunnel_name) -> None:
+    command = f"./code tunnel --accept-server-license-terms --name {tunnel_name}"
     p = subprocess.Popen(
         command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
     )
@@ -44,7 +44,7 @@ def run(command: str) -> None:
 def is_colab():
     return 'google.colab' in sys.modules
 
-def colabconnect() -> None:
+def colabconnect(tunnel_name) -> None:
     if is_colab():
         print("Mounting Google Drive...")
         drive = import_module("google.colab.drive")
@@ -69,4 +69,4 @@ def colabconnect() -> None:
     run("tar -xf vscode_cli.tar.gz")
 
     print("Starting the tunnel")
-    start_tunnel()
+    start_tunnel(tunnel_name)
