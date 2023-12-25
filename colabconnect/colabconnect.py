@@ -13,13 +13,17 @@ message = """
 
 
 def start_tunnel(tunnel_name) -> None:
-    command = f"./code tunnel --accept-server-license-terms --name {tunnel_name}"
+    if tunnel_name is None:
+        command = f"./code tunnel --accept-server-license-terms"
+    else:
+        command = f"./code tunnel --accept-server-license-terms --name {tunnel_name}"
     p = subprocess.Popen(
         command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
     )
     show_outputs = False
     while True:
         line = p.stdout.readline().decode("utf-8")
+        print(line)
         if show_outputs:
             print(line.strip())
         if "To grant access to the server" in line:
@@ -33,6 +37,7 @@ def start_tunnel(tunnel_name) -> None:
             line = ""
         if line == "" and p.poll() is not None:
             break
+        print('------')
     return None
 
 
@@ -44,7 +49,7 @@ def run(command: str) -> None:
 def is_colab():
     return 'google.colab' in sys.modules
 
-def colabconnect(tunnel_name) -> None:
+def colabconnect(tunnel_name=None) -> None:
     if is_colab():
         print("Mounting Google Drive...")
         drive = import_module("google.colab.drive")
