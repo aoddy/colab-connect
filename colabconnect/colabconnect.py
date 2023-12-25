@@ -23,7 +23,7 @@ def start_tunnel(tunnel_name) -> None:
     show_outputs = False
     while True:
         line = p.stdout.readline().decode("utf-8")
-        print(line)
+        #print(line)
         if show_outputs:
             print(line.strip())
         if "To grant access to the server" in line:
@@ -35,9 +35,11 @@ def start_tunnel(tunnel_name) -> None:
             print("Logs:")
             show_outputs = True
             line = ""
+        if "Creating tunnel with the name:" in line:
+            print(line.strip())
         if line == "" and p.poll() is not None:
             break
-        print('------')
+        #print('------')
     return None
 
 
